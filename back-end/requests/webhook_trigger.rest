@@ -1,0 +1,7 @@
+# this can be any method
+POST http://localhost:3000/api/request/test
+Content-Type: application/json
+
+{
+    "hello": "hello"
+}

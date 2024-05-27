@@ -1,0 +1,28 @@
+{
+  "requests": [
+    {
+      "time": "12:00",
+      "method": "POST",
+      "path": "/post_request",
+      "request_id": 1
+    },
+    {
+      "time": "8:35",
+      "method": "GET",
+      "path": "/get_request",
+      "request_id": 2
+    }
+  ],
+  "requestData": [
+    {
+      "id": 1,
+      "header": "this is a header",
+      "body": "body #1"
+    },
+    {
+      "id": 2,
+      "header": "this is a header 2",
+      "body": "body # 2"
+    }
+  ]
+}

@@ -5,11 +5,11 @@ const bcrypt = require("bcrypt");
 const pgService = require("./utils/pgService");
 const { v4: uuidGenerator } = require("uuid");
 app.use(express.json());
-const { saveRequestInfo } = require("./utils/mongoService");
+const { saveRequestInfo, getSpecificRequest } = require("./utils/mongoService");
 
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
+// app.get("/", (req, res) => {
+//   res.send("hello world");
+// });
 
 // create a random webhook token to be used as an endpoint
 app.post("/api/generateWebhookToken", async (req, res) => {
@@ -38,16 +38,11 @@ app.all("/api/request/:webhookToken", async (req, res) => {
   const path = req.path;
 
   const mongoId = await saveRequestInfo(req);
-  encryptedMongoId = await bcrypt.hash(mongoId, 5);
-  console.log("encrypted id: ", encryptedMongoId);
-  await pgService.insertIncomingRequestInfo(
-    path,
-    method,
-    encryptedMongoId,
-    binId
-  );
+  // encryptedMongoId = await bcrypt.hash(mongoId, 5);
 
-  res.status(200);
+  await pgService.insertIncomingRequestInfo(path, method, mongoId, binId);
+
+  res.status(200).send("Request information saved successfully");
 });
 
 // returns all requests for a given webhook token
@@ -58,17 +53,16 @@ app.get("/api/allRequests/:webhookToken", async (req, res) => {
   if (!binId) return res.status(401);
 
   const allRequestData = await pgService.getAllRequestsForToken(binId);
-  // some data pull => hello1: [request1, request2, request3]
 
-  res.status(200).send(JSON.stringify(allRequestData));
+  res.status(200).send(allRequestData);
 });
 
 // returns a specific request from mongo db given the mongo ID
-app.get("/api/getSpecificRequest/:encryptedMongoId", (req, res) => {
-  const encryptedMongoId = req.params.encryptedMongoId;
-  const specificRequestData = mongoData[encryptedMongoId];
+app.get("/api/getSpecificRequest/:mongoId", async (req, res) => {
+  const mongoId = req.params.mongoId;
+  const specificRequestData = await getSpecificRequest(mongoId);
 
-  res.status(200).send(JSON.stringify(specificRequestData));
+  res.status(200).send(specificRequestData);
 });
 
 app.listen(port, () => {

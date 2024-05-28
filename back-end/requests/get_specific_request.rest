@@ -1,1 +1,1 @@
-GET http://localhost:3000/api/getSpecificRequest/123
+GET http://localhost:3000/api/getSpecificRequest/66565904ca0a1749c187dbf2

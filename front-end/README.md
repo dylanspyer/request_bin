@@ -29,7 +29,6 @@ Front-end Documentation
 - `requests` gets all requests from the temp JSON server
 - `requestData` gets the request data of the selected request by filtering by `id`
 
-
 ## JSON server
 
 - Created JSON temp server with stock data for testing before connecting to the backend
@@ -38,6 +37,7 @@ Front-end Documentation
   - This database contains all of the requests
 - `requestData` mirrors MongoDB database
   - This database contains the individual request information
+
 
 # May 28
 

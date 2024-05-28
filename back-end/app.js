@@ -7,10 +7,6 @@ const { v4: uuidGenerator } = require("uuid");
 app.use(express.json());
 const { saveRequestInfo, getSpecificRequest } = require("./utils/mongoService");
 
-// app.get("/", (req, res) => {
-//   res.send("hello world");
-// });
-
 // create a random webhook token to be used as an endpoint
 app.post("/api/generateWebhookToken", async (req, res) => {
   let token;
@@ -61,6 +57,8 @@ app.get("/api/allRequests/:webhookToken", async (req, res) => {
 app.get("/api/getSpecificRequest/:mongoId", async (req, res) => {
   const mongoId = req.params.mongoId;
   const specificRequestData = await getSpecificRequest(mongoId);
+
+  if (!specificRequestData) return res.status(401);
 
   res.status(200).send(specificRequestData);
 });

@@ -1,6 +1,6 @@
 const config = require("./config.js");
 const { Client } = require("pg");
-
+// This file is used to query the database for us
 const logQuery = (statement, parameters) => {
   const timestamp = new Date();
   const formattedTimeStamp = timestamp.toString().substring(4, 24);

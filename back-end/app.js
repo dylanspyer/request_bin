@@ -1,91 +1,66 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-
+const bcrypt = require("bcrypt");
+const pgService = require("./utils/pgService");
+const { v4: uuidGenerator } = require("uuid");
 app.use(express.json());
-
-const pgData = {
-  hello1: [
-    {
-      method: "GET",
-      path: "/sample/get/test",
-      created_at: "8:56",
-      mongo_id: 123,
-    },
-    {
-      method: "POST",
-      path: "/sample/get/test",
-      created_at: "8:56",
-      mongo_id: 122,
-    },
-  ],
-  hello2: [
-    {
-      method: "GET",
-      path: "/sample/get/test",
-      created_at: "8:56",
-      mongo_id: 121,
-    },
-    {
-      method: "POST",
-      path: "/sample/get/test",
-      created_at: "8:56",
-      mongo_id: 113,
-    },
-  ],
-};
-
-const mongoData = {
-  123: { header1: "hi", method: "GET" },
-  122: { header1: "hi", method: "GET" },
-  121: { header1: "hi", method: "GET" },
-  112: { header1: "hi", method: "GET" },
-  113: { header1: "hi", method: "GET" },
-};
-
-app.get("/", (req, res) => {
-  res.send("hello!");
-});
+const { saveRequestInfo, getSpecificRequest } = require("./utils/mongoService");
 
 // create a random webhook token to be used as an endpoint
-app.post("/api/generateWebhookToken", (req, res) => {
-  // todo: create function to generate unique end point
-  // testing endpoint
-  let generateWebhookToken = "testwebhooktoken";
+app.post("/api/generateWebhookToken", async (req, res) => {
+  let token;
+  let uniqueToken;
 
-  console.log(`generateWebhookToken ${generateWebhookToken}`);
+  do {
+    token = uuidGenerator();
+    uniqueToken = await pgService.isUniqueToken(token);
+  } while (!uniqueToken);
 
-  res.status(200).send(generateWebhookToken);
+  await pgService.saveWebhookToken(token);
+
+  res.status(200).send(token);
 });
 
 // catch all for recording a webhook trigger of any request type
 // save to a database for users to view later
-app.all("/api/request/:webhookToken", (req, res) => {
+app.all("/api/request/:webhookToken", async (req, res) => {
   const webhookToken = req.params.webhookToken;
+  const binId = await pgService.getWebhookToken(webhookToken);
 
-  console.log(req.headers);
-  console.log(req.body);
-  console.log(req.method);
-  console.log(`webhookToken ${webhookToken}`);
+  if (!binId) return res.status(401);
 
-  res.status(200).send("test");
+  const method = req.method;
+  const path = req.path;
+
+  const mongoId = await saveRequestInfo(req);
+  // encryptedMongoId = await bcrypt.hash(mongoId, 5);
+
+  await pgService.insertIncomingRequestInfo(path, method, mongoId, binId);
+
+  res.status(200).send("Request information saved successfully");
 });
 
 // returns all requests for a given webhook token
-app.get("/api/allRequests/:webhookToken", (req, res) => {
+app.get("/api/allRequests/:webhookToken", async (req, res) => {
   const webhookToken = req.params.webhookToken;
-  const allRequestData = pgData[webhookToken];
-  // some data pull => hello1: [request1, request2, request3]
+  const binId = await pgService.getWebhookToken(webhookToken);
 
-  res.status(200).send(JSON.stringify(allRequestData));
+  if (!binId) return res.status(401);
+
+  const allRequestData = await pgService.getAllRequestsForToken(binId);
+
+  res.status(200).send(allRequestData);
 });
 
 // returns a specific request from mongo db given the mongo ID
-app.get("/api/getSpecificRequest/:encryptedMongoId", (req, res) => {
-  const encryptedMongoId = req.params.encryptedMongoId;
-  const specificRequestData = mongoData[encryptedMongoId];
+app.get("/api/getSpecificRequest/:mongoId", async (req, res) => {
+  const mongoId = req.params.mongoId;
+  const specificRequestData = await getSpecificRequest(mongoId);
 
-  res.status(200).send(JSON.stringify(specificRequestData));
+  if (!specificRequestData) return res.status(401);
+
+  res.status(200).send(specificRequestData);
 });
 
 app.listen(port, () => {

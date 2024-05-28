@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const pgService = require("./utils/pgService");
+const { v4: uuidGenerator } = require("uuid");
 
 app.use(express.json());
 
@@ -44,24 +46,33 @@ const mongoData = {
 };
 
 app.get("/", (req, res) => {
-  res.send("hello!");
+  res.send("hello world");
 });
 
 // create a random webhook token to be used as an endpoint
-app.post("/api/generateWebhookToken", (req, res) => {
-  // todo: create function to generate unique end point
-  // testing endpoint
-  let generateWebhookToken = "testwebhooktoken";
+app.post("/api/generateWebhookToken", async (req, res) => {
+  let token;
+  let uniqueToken;
 
-  console.log(`generateWebhookToken ${generateWebhookToken}`);
+  do {
+    token = uuidGenerator();
+    uniqueToken = await pgService.isUniqueToken(token);
+  } while (!uniqueToken);
 
-  res.status(200).send(generateWebhookToken);
+  await pgService.saveWebhookToken(token);
+
+  res.status(200).send(token);
 });
 
 // catch all for recording a webhook trigger of any request type
 // save to a database for users to view later
-app.all("/api/request/:webhookToken", (req, res) => {
+app.all("/api/request/:webhookToken", async (req, res) => {
   const webhookToken = req.params.webhookToken;
+  const binId = await pgService.getWebhookToken(webhookToken);
+
+  if (!binId) {
+    return res.status(401);
+  }
 
   console.log(req.headers);
   console.log(req.body);
@@ -72,9 +83,13 @@ app.all("/api/request/:webhookToken", (req, res) => {
 });
 
 // returns all requests for a given webhook token
-app.get("/api/allRequests/:webhookToken", (req, res) => {
+app.get("/api/allRequests/:webhookToken", async (req, res) => {
   const webhookToken = req.params.webhookToken;
-  const allRequestData = pgData[webhookToken];
+  const binId = await pgService.getWebhookToken(webhookToken);
+
+  if (!binId) return res.status(401);
+
+  const allRequestData = await pgService.getAllRequestsForToken(binId);
   // some data pull => hello1: [request1, request2, request3]
 
   res.status(200).send(JSON.stringify(allRequestData));

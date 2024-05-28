@@ -1,6 +1,7 @@
 const { MONGODB_URI } = require("./config.js");
 const mongoose = require("mongoose");
 
+// This connects us to our mongoDB that is located in mongoDB_uri
 const connectToMongoDB = () => {
   mongoose.set("strictQuery", false);
 

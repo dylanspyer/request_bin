@@ -1,6 +1,7 @@
 const RequestInfo = require("../models/requestInfo");
 const { connectToMongoDB } = require("./mongo-connection");
 
+// Save a request to mongo database
 const saveRequestInfo = async (req) => {
   const requestInfo = new RequestInfo({
     headers: req.headers,
@@ -17,9 +18,10 @@ const saveRequestInfo = async (req) => {
   return mongoId;
 };
 
-const getSpecificRequest = async (mongId) => {
+// Gets information about a specific request given its mongo id
+const getSpecificRequest = async (mongoId) => {
   await connectToMongoDB();
-  const requestInfo = await RequestInfo.findById(mongId);
+  const requestInfo = await RequestInfo.findById(mongoId);
 
   return requestInfo;
 };

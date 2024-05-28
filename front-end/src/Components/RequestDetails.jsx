@@ -1,31 +1,33 @@
 /* eslint-disable react/prop-types */
 
 const RequestDetails = ({ selectedRequestDetails }) => {
-  // Populates default info before a user clicks a target request
-  const defaultInfo = () => {
+  // Display "targeted" request data on RHS
+  const requestData = () => {
+    
+    // Populates default info before a user clicks a target request
+    if (selectedRequestDetails == null) {
+      return (
+        <div className="column">
+          <h2>Welcome to our Site</h2>
+          <p>*Default statement*</p>
+        </div>
+      );
+    }
+
     return (
-      <div>
-        <h2>Welcome to our Site</h2>
+      <div className="column">
+        <h2>Selected Request Data</h2>
+        <p> {selectedRequestDetails.header}</p>
+        <p> {selectedRequestDetails.body}</p>
       </div>
     );
   };
 
-  // Display "targeted" request data on RHS
-  const requestData = () => {
-    if (selectedRequestDetails == null) {
-      return null;
-    }
-
-    return (
-      <>
-        {" "}
-        <p> {selectedRequestDetails.header}</p>
-        <p> {selectedRequestDetails.body}</p>
-      </>
-    );
-  };
-
-  return <>{requestData() || defaultInfo()}</>;
+  return (
+    <>
+      {requestData()}
+    </>
+  );
 };
 
 export default RequestDetails;

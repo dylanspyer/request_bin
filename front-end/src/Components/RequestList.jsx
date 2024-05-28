@@ -2,16 +2,15 @@
 
 // Populates LHS list
 // Passes the MongoDB ID when clicked
-// To be converted to a component
 const RequestList = ({ requests, handleRequestClick }) => {
   const createRequestList = (requests) => {
     return requests.map(requestInfo);
   };
 
-  const requestInfo = ({ request_id, time, method, path }) => {
+  const requestInfo = ({ mongo_id, time, method, path }) => {
     return (
-      <li key={request_id}>
-        <button onClick={() => handleRequestClick(request_id)}>
+      <li key={mongo_id}>
+        <button onClick={() => handleRequestClick(mongo_id)}>
           {" "}
           {time} {method} {path}
         </button>
@@ -20,10 +19,10 @@ const RequestList = ({ requests, handleRequestClick }) => {
   };
 
   return (
-    <>
-      {" "}
+    <div className="column">
+      <h2>List of Webhook Requests</h2>
       <ul>{createRequestList(requests)}</ul>
-    </>
+    </div>
   );
 };
 

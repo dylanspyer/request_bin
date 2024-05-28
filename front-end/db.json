@@ -1,28 +1,86 @@
 {
-  "requests": [
-    {
-      "time": "12:00",
-      "method": "POST",
-      "path": "/post_request",
-      "request_id": 1
-    },
-    {
-      "time": "8:35",
-      "method": "GET",
-      "path": "/get_request",
-      "request_id": 2
-    }
-  ],
-  "requestData": [
-    {
-      "id": 1,
-      "header": "this is a header",
+  "pgDB": {
+    "GenericWebhookToken": [
+      {
+        "bin_id": "GenericWebhookToken",
+        "time": "12:00",
+        "method": "POST",
+        "path": "/",
+        "mongo_id": 1
+      },
+      {
+        "bin_id": "GenericWebhookToken",
+        "time": "8:35",
+        "method": "GET",
+        "path": "/100",
+        "mongo_id": 2
+      },
+      {
+        "bin_id": "GenericWebhookToken",
+        "time": "1:23",
+        "method": "POST",
+        "path": "/bin10",
+        "mongo_id": 3
+      },
+      {
+        "bin_id": "GenericWebhookToken",
+        "time": "4:56",
+        "method": "GET",
+        "path": "/100bin",
+        "mongo_id": 4
+      }
+    ],
+    "200": [
+      {
+        "bin_id": 200,
+        "time": "12:00",
+        "method": "POST",
+        "path": "/200bin",
+        "mongo_id": 1
+      },
+      {
+        "bin_id": 200,
+        "time": "8:35",
+        "method": "GET",
+        "path": "/200bin",
+        "mongo_id": 2
+      },
+      {
+        "bin_id": 200,
+        "time": "1:23",
+        "method": "POST",
+        "path": "/200bin",
+        "mongo_id": 3
+      },
+      {
+        "bin_id": 200,
+        "time": "4:56",
+        "method": "GET",
+        "path": "/200bin",
+        "mongo_id": 4
+      }
+    ]
+  },
+  "mongoRequestData": {
+    "1": {
+      "id": "1",
+      "header": "this is a header 1",
       "body": "body #1"
     },
-    {
-      "id": 2,
+    "2": {
+      "id": "2",
       "header": "this is a header 2",
       "body": "body # 2"
+    },
+    "3": {
+      "id": "3",
+      "header": "this is a header 3",
+      "body": "body #3"
+    },
+    "4": {
+      "id": "4",
+      "header": "this is a header 4",
+      "body": "body # 4"
     }
-  ]
+  }
 }

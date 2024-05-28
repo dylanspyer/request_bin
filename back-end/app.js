@@ -1,50 +1,11 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const bcrypt = require("bcrypt");
 const pgService = require("./utils/pgService");
 const { v4: uuidGenerator } = require("uuid");
-const RequestInfo = require("./models/requestInfo");
-const { connectToMongoDB } = require("./utils/mongo-connection");
 app.use(express.json());
-
-const pgData = {
-  hello1: [
-    {
-      method: "GET",
-      path: "/sample/get/test",
-      created_at: "8:56",
-      mongo_id: 123,
-    },
-    {
-      method: "POST",
-      path: "/sample/get/test",
-      created_at: "8:56",
-      mongo_id: 122,
-    },
-  ],
-  hello2: [
-    {
-      method: "GET",
-      path: "/sample/get/test",
-      created_at: "8:56",
-      mongo_id: 121,
-    },
-    {
-      method: "POST",
-      path: "/sample/get/test",
-      created_at: "8:56",
-      mongo_id: 113,
-    },
-  ],
-};
-
-const mongoData = {
-  123: { header1: "hi", method: "GET" },
-  122: { header1: "hi", method: "GET" },
-  121: { header1: "hi", method: "GET" },
-  112: { header1: "hi", method: "GET" },
-  113: { header1: "hi", method: "GET" },
-};
+const { saveRequestInfo } = require("./utils/mongoService");
 
 app.get("/", (req, res) => {
   res.send("hello world");
@@ -76,19 +37,15 @@ app.all("/api/request/:webhookToken", async (req, res) => {
   const method = req.method;
   const path = req.path;
 
-  const requestInfo = new RequestInfo({
-    headers: req.headers,
+  const mongoId = await saveRequestInfo(req);
+  encryptedMongoId = await bcrypt.hash(mongoId, 5);
+  console.log("encrypted id: ", encryptedMongoId);
+  await pgService.insertIncomingRequestInfo(
     path,
-    queryParams: req.queryParams,
-    body: req.body,
-    method: req.method,
-  });
-
-  await connectToMongoDB();
-  const result = await requestInfo.save();
-  const mongoId = result._id.toString();
-
-  await pgService.insertIncomingRequestInfo(path, method, mongoId, binId);
+    method,
+    encryptedMongoId,
+    binId
+  );
 
   res.status(200);
 });

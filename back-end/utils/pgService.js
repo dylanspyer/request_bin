@@ -44,10 +44,6 @@ const insertIncomingRequestInfo = async (path, method, mongoId, binId) => {
   await dbQuery(INSERT_REQUEST_INFO, path, method, mongoId, binId);
 };
 
-// validate that webhookTokeExists
-// save webhookToken to database
-// get all the requests for a webhook token
-
 module.exports = {
   getWebhookToken,
   isUniqueToken,

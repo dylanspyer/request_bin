@@ -17,6 +17,14 @@ const saveRequestInfo = async (req) => {
   return mongoId;
 };
 
+const getSpecificRequest = async (mongId) => {
+  await connectToMongoDB();
+  const requestInfo = await RequestInfo.findById(mongId);
+
+  return requestInfo;
+};
+
 module.exports = {
   saveRequestInfo,
+  getSpecificRequest,
 };

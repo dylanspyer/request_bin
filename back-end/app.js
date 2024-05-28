@@ -68,12 +68,10 @@ app.post("/api/generateWebhookToken", async (req, res) => {
 // catch all for recording a webhook trigger of any request type
 // save to a database for users to view later
 app.all("/api/request/:webhookToken", async (req, res) => {
-  // const webhookToken = req.params.webhookToken;
-  // const binId = await pgService.getWebhookToken(webhookToken);
+  const webhookToken = req.params.webhookToken;
+  const binId = await pgService.getWebhookToken(webhookToken);
 
-  // if (!binId) return res.status(401);
-
-  await connectToMongoDB();
+  if (!binId) return res.status(401);
 
   const method = req.method;
   const path = req.path;
@@ -86,16 +84,13 @@ app.all("/api/request/:webhookToken", async (req, res) => {
     method: req.method,
   });
 
-  const newRequestInfo = await requestInfo.save();
+  await connectToMongoDB();
+  const result = await requestInfo.save();
+  const mongoId = result._id.toString();
 
-  console.log("request info: ", requestInfo);
-  console.log(newRequestInfo);
-  // console.log(req.body);
-  // console.log(req.method);
-  // console.log(req.query);
-  // console.log(`webhookToken ${webhookToken}`);
+  await pgService.insertIncomingRequestInfo(path, method, mongoId, binId);
 
-  res.status(200).send("test");
+  res.status(200);
 });
 
 // returns all requests for a given webhook token

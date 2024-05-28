@@ -3,7 +3,8 @@ const app = express();
 const port = 3000;
 const pgService = require("./utils/pgService");
 const { v4: uuidGenerator } = require("uuid");
-
+const RequestInfo = require("./models/requestInfo");
+const { connectToMongoDB } = require("./utils/mongo-connection");
 app.use(express.json());
 
 const pgData = {
@@ -67,17 +68,32 @@ app.post("/api/generateWebhookToken", async (req, res) => {
 // catch all for recording a webhook trigger of any request type
 // save to a database for users to view later
 app.all("/api/request/:webhookToken", async (req, res) => {
-  const webhookToken = req.params.webhookToken;
-  const binId = await pgService.getWebhookToken(webhookToken);
+  // const webhookToken = req.params.webhookToken;
+  // const binId = await pgService.getWebhookToken(webhookToken);
 
-  if (!binId) {
-    return res.status(401);
-  }
+  // if (!binId) return res.status(401);
 
-  console.log(req.headers);
-  console.log(req.body);
-  console.log(req.method);
-  console.log(`webhookToken ${webhookToken}`);
+  await connectToMongoDB();
+
+  const method = req.method;
+  const path = req.path;
+
+  const requestInfo = new RequestInfo({
+    headers: req.headers,
+    path,
+    queryParams: req.queryParams,
+    body: req.body,
+    method: req.method,
+  });
+
+  const newRequestInfo = await requestInfo.save();
+
+  console.log("request info: ", requestInfo);
+  console.log(newRequestInfo);
+  // console.log(req.body);
+  // console.log(req.method);
+  // console.log(req.query);
+  // console.log(`webhookToken ${webhookToken}`);
 
   res.status(200).send("test");
 });

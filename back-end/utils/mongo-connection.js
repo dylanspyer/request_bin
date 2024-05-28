@@ -1,4 +1,5 @@
 const { MONGODB_URI } = require("./config.js");
+const mongoose = require("mongoose");
 
 const connectToMongoDB = () => {
   mongoose.set("strictQuery", false);

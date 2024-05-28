@@ -1,5 +1,5 @@
 # this can be any method
-POST http://localhost:3000/api/request/test
+POST http://localhost:3000/api/request/test?will=fool
 Content-Type: application/json
 
 {

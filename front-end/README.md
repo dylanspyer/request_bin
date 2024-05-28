@@ -38,3 +38,23 @@ Front-end Documentation
   - This database contains all of the requests
 - `requestData` mirrors MongoDB database
   - This database contains the individual request information
+
+# May 28
+
+- Added functionality that where if you click the same item twice, it returns to `null` state
+  - AKA, it shows the default view on the RHS
+- Revised names from `requestData` to `mongoRequestData` for added clarity on data pulled from Mongo vs data pulled from Postgres
+- Refactored `RequestDetails.jsx` for more clarity on what will be output to the screen
+- Revised `db.json` to use a hash of hashes for the MongoDB data, where the `key` is the MongoDB object's `id`
+- Revised `db.json` to use a hash of hashes in `pgdata`, where the key of the inner hash is the webhook
+token and the value is the array of requests- Created landing page before user has a webhook token
+  - User will be prompted to click a button which will create a webhook token
+  - currently just a generic string
+- Created default page when webhook token is provided by code or by url path
+  - Webhook token is then stored in the `webhookToken` state variable
+- Added index.css with minor CSS for clarity -> namely, columns for the LHS & RHS on main page
+
+## Todo
+
+- sort out error when user enters an invalid webhook token in the url
+- When the database is set up, we'll need to change some of the services files to work with the actual db instead of `db.json`

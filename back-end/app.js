@@ -31,7 +31,7 @@ app.all("/api/request/:webhookToken", async (req, res) => {
   if (!binId) return res.status(401);
 
   const method = req.method;
-  const path = req.path;
+  const path = req.path.replace(`/api/request/${webhookToken}`, "/");
 
   const mongoId = await saveRequestInfo(req);
   // encryptedMongoId = await bcrypt.hash(mongoId, 5);

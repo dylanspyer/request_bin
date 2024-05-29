@@ -16,6 +16,14 @@ Welcome to the documentation for our backend system. This guide aims to provide 
 
 - `200 OK` with the generated token in the response body.
 
+**Sample `200` Response**
+
+```json
+{
+  "webHookToken": "958a8baa-10d5-497a-9e01-728513d3c71f"
+}
+```
+
 **Functionality:**
 
 - Generates a unique token using a uuid generator

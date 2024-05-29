@@ -19,7 +19,7 @@ app.post("/api/generateWebhookToken", async (req, res) => {
 
   await pgService.saveWebhookToken(token);
 
-  res.status(200).send(token);
+  res.status(200).send({ webHookToken: token });
 });
 
 // catch all for recording a webhook trigger of any request type

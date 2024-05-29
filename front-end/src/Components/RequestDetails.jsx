@@ -1,4 +1,46 @@
 /* eslint-disable react/prop-types */
+const createTable = (title, property) => {
+  if (!property) return;
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>{title}</th>
+        </tr>
+      </thead>
+      <tbody>{createTableRows(property)}</tbody>
+    </table>
+  );
+};
+
+const createTableRows = (headers) => {
+  const entries = Object.entries(headers);
+  return entries.map(createTableD);
+};
+
+const createTableD = (entry) => {
+  const [key, value] = entry;
+  return (
+    <tr key={key}>
+      <td>{key}</td>
+      <td>{value} </td>
+    </tr>
+  );
+};
+
+const handleBodyDataType = (body) => {
+  if (typeof body === "string") {
+    return (
+      <>
+        <h2>Body</h2>
+        <p>{body}</p>
+      </>
+    );
+  } else {
+    return createTable("Body", body);
+  }
+};
 
 const RequestDetails = ({ selectedRequestDetails }) => {
   // Display "targeted" request data on RHS
@@ -13,43 +55,19 @@ const RequestDetails = ({ selectedRequestDetails }) => {
       );
     }
 
-    const createTable = (title, property) => {
-      if (!property) return;
+    const { method, path, headers, queryParams, body } = selectedRequestDetails;
 
-      return (
-        <table>
-          <th>{title}</th>
-          {createTableRows(property)}
-        </table>
-      );
-    };
-
-    const createTableRows = (headers) => {
-      const entries = Object.entries(headers);
-      return entries.map(createTableD);
-    };
-
-    const createTableD = (entry) => {
-      const [key, value] = entry;
-      return (
-        <tr>
-          <td>{key}</td>
-          <td>{value} </td>
-        </tr>
-      );
-    };
-    console.log(selectedRequestDetails);
     return (
       <div className="column">
         <h2>Selected Request Data</h2>
         <p>
           {" "}
-          Details: {selectedRequestDetails.method} {selectedRequestDetails.path}{" "}
+          Details: {method} {path}{" "}
         </p>
 
-        {createTable("Headers", selectedRequestDetails.headers)}
-        {createTable("Query Params", selectedRequestDetails.queryParams)}
-        {createTable("Body", selectedRequestDetails.body)}
+        {createTable("Headers", headers)}
+        {createTable("Query Params", queryParams)}
+        {handleBodyDataType(body)}
       </div>
     );
   };

@@ -4,10 +4,12 @@ const port = 3000;
 const bcrypt = require("bcrypt");
 const pgService = require("./utils/pgService");
 const { v4: uuidGenerator } = require("uuid");
-app.use(express.json());
 const { saveRequestInfo, getSpecificRequest } = require("./utils/mongoService");
 const cors = require("cors");
+
 app.use(cors());
+app.use(express.json());
+app.use(express.text({ type: 'text/*' }));
 
 // create a random webhook token to be used as an endpoint
 app.post("/api/generateWebhookToken", async (req, res) => {
@@ -34,7 +36,7 @@ app.all("/api/request/:webhookToken", async (req, res) => {
 
   const method = req.method;
   const path = req.path.replace(`/api/request/${webhookToken}`, "/");
-  
+
   const mongoId = await saveRequestInfo(req, path);
   // encryptedMongoId = await bcrypt.hash(mongoId, 5);
 

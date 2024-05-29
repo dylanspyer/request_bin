@@ -55,8 +55,7 @@ function App() {
   // Send to the backend to create a webhook token
   // Using a generic one for now
   const createWebhook = () => {
-    generateWebhookTokenService
-      .getWebhookToken().then((token) => {
+    generateWebhookTokenService.getWebhookToken().then((token) => {
       setWebhookToken(token);
       window.location.href = window.location.href + token;
     });
@@ -75,7 +74,11 @@ function App() {
     return (
       <div>
         <h1>Team_2 RequestBin Site</h1>
-        <p style={{ textAlign: "right" }}>{webhookToken}</p>
+        <p style={{ textAlign: "right" }}>
+          {window.location.href.replace(webhookToken, "") +
+            "api/request/" +
+            webhookToken}
+        </p>{" "}
         <div className="row">
           <RequestList
             requests={requests}

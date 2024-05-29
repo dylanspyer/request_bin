@@ -19,7 +19,7 @@ app.post("/api/generateWebhookToken", async (req, res) => {
 
   await pgService.saveWebhookToken(token);
 
-  res.status(200).send(token);
+  res.status(200).send({ webHookToken: token });
 });
 
 // catch all for recording a webhook trigger of any request type
@@ -31,7 +31,7 @@ app.all("/api/request/:webhookToken", async (req, res) => {
   if (!binId) return res.status(401);
 
   const method = req.method;
-  const path = req.path;
+  const path = req.path.replace(`/api/request/${webhookToken}`, "/");
 
   const mongoId = await saveRequestInfo(req);
   // encryptedMongoId = await bcrypt.hash(mongoId, 5);

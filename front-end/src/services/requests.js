@@ -1,24 +1,23 @@
 import axios from "axios";
 
-// Get default JSON objects from JSON server (on db.json)
-const getAll = async (webhookToken) => {
+const getAllByToken = async (webhookToken) => {
   try {
-    // Pulling from the JSON server
-    // First enter into the terminal: npx json-server --port 3001 --watch db.json
-    
-    const response = await axios.get(`http://localhost:3001/pgDB`);
+    const response = await axios.get(
+      `http://localhost:3000/api/allRequests/${webhookToken}`
+    );
     // /api/allRequests/${webhookToken}
     // console.log(response.data)
-
-    console.log(response.data[webhookToken])
-    if (!!response.data[webhookToken]) {
-      return response.data[webhookToken];
+    console.log("response", response);
+    console.log(response.data);
+    if (response.data) {
+      return response.data;
     } else {
-      throw "Webhook Token Not Found"
+      throw "Webhook Token Not Found";
     }
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    throw Error;
   }
 };
 
-export default { getAll };
+export default { getAllByToken };

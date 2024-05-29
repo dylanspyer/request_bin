@@ -7,10 +7,10 @@ const RequestList = ({ requests, handleRequestClick }) => {
     return requests.map(requestInfo);
   };
 
-  const requestInfo = ({ mongo_id, time, method, path }) => {
+  const requestInfo = ({ request_id, time, method, path }) => {
     return (
-      <li key={mongo_id}>
-        <button onClick={() => handleRequestClick(mongo_id)}>
+      <li key={request_id}>
+        <button onClick={() => handleRequestClick(request_id)}>
           {" "}
           {time} {method} {path}
         </button>

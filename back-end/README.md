@@ -143,6 +143,9 @@ The field `request_id` maps to the corresponding request in mongo_db. It is an a
     "will": "fool",
     "fef": "efef"
   },
+  "body": {
+    "test": "hello"
+  }
   "method": "POST",
   "id": "665671eab620270e1234157b"
 }

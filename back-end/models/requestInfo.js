@@ -9,7 +9,7 @@ const requestInfoSchema = new mongoose.Schema({
     required: true,
   },
   queryParams: {
-    type: String,
+    type: Object,
   },
   body: {
     type: Object,

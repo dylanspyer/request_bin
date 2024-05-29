@@ -87,6 +87,8 @@ Welcome to the documentation for our backend system. This guide aims to provide 
 ];
 ```
 
+The field `request_id` maps to the corresponding request in mongo_db. It is an alias for `mongo_id` in our postgres database
+
 **Functionality:**
 
 - Retrieves the `webhookToken` from the URL parameter.

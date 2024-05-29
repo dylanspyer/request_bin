@@ -3,7 +3,6 @@
 const RequestDetails = ({ selectedRequestDetails }) => {
   // Display "targeted" request data on RHS
   const requestData = () => {
-    console.log(selectedRequestDetails);
     // Populates default info before a user clicks a target request
     if (selectedRequestDetails === null) {
       return (
@@ -14,28 +13,32 @@ const RequestDetails = ({ selectedRequestDetails }) => {
       );
     }
 
-    const createRequestList = (object) => {
-      return requests.map(requestInfo);
-    };
+    const createTable = (title, property) => {
+      if (!property) return;
 
-    const requestInfo = ({ request_id, time, method, path }) => {
       return (
-        <li key={request_id}>
-          <button onClick={() => handleRequestClick(request_id)}>
-            {" "}
-            {time} {method} {path}
-          </button>
-        </li>
+        <table>
+          <th>{title}</th>
+          {createTableRows(property)}
+        </table>
       );
     };
 
-    const displayObject = (headers) => {
-      for (var key in headers) {
-        console.log(key + " -> " + headers[key]);
-        // if (key == "name") doSomething();
-      }
+    const createTableRows = (headers) => {
+      const entries = Object.entries(headers);
+      return entries.map(createTableD);
     };
 
+    const createTableD = (entry) => {
+      const [key, value] = entry;
+      return (
+        <tr>
+          <td>{key}</td>
+          <td>{value} </td>
+        </tr>
+      );
+    };
+    console.log(selectedRequestDetails);
     return (
       <div className="column">
         <h2>Selected Request Data</h2>
@@ -43,9 +46,10 @@ const RequestDetails = ({ selectedRequestDetails }) => {
           {" "}
           Details: {selectedRequestDetails.method} {selectedRequestDetails.path}{" "}
         </p>
-        {/* <p> Headers: {displayObject(selectedRequestDetails.headers)} </p> */}
-        <h2>Headers</h2>
-        <ul>{createRequestList}</ul>
+
+        {createTable("Headers", selectedRequestDetails.headers)}
+        {createTable("Query Params", selectedRequestDetails.queryParams)}
+        {createTable("Body", selectedRequestDetails.body)}
       </div>
     );
   };

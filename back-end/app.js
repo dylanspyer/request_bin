@@ -4,8 +4,12 @@ const port = 3000;
 const bcrypt = require("bcrypt");
 const pgService = require("./utils/pgService");
 const { v4: uuidGenerator } = require("uuid");
-app.use(express.json());
 const { saveRequestInfo, getSpecificRequest } = require("./utils/mongoService");
+const cors = require("cors");
+
+app.use(cors());
+app.use(express.json());
+app.use(express.text({ type: 'text/*' }));
 
 // create a random webhook token to be used as an endpoint
 app.post("/api/generateWebhookToken", async (req, res) => {
@@ -28,12 +32,12 @@ app.all("/api/request/:webhookToken", async (req, res) => {
   const webhookToken = req.params.webhookToken;
   const binId = await pgService.getWebhookToken(webhookToken);
 
-  if (!binId) return res.status(401);
+  if (!binId) return res.sendStatus(401);
 
   const method = req.method;
   const path = req.path.replace(`/api/request/${webhookToken}`, "/");
 
-  const mongoId = await saveRequestInfo(req);
+  const mongoId = await saveRequestInfo(req, path);
   // encryptedMongoId = await bcrypt.hash(mongoId, 5);
 
   await pgService.insertIncomingRequestInfo(path, method, mongoId, binId);
@@ -46,7 +50,7 @@ app.get("/api/allRequests/:webhookToken", async (req, res) => {
   const webhookToken = req.params.webhookToken;
   const binId = await pgService.getWebhookToken(webhookToken);
 
-  if (!binId) return res.status(401);
+  if (!binId) return res.sendStatus(401);
 
   const allRequestData = await pgService.getAllRequestsForToken(binId);
 
@@ -58,7 +62,9 @@ app.get("/api/getSpecificRequest/:mongoId", async (req, res) => {
   const mongoId = req.params.mongoId;
   const specificRequestData = await getSpecificRequest(mongoId);
 
-  if (!specificRequestData) return res.status(401);
+  if (!specificRequestData) {
+    return res.sendStatus(401);
+  }
 
   res.status(200).send(specificRequestData);
 });

@@ -1,9 +1,10 @@
 import axios from "axios";
+const baseUrl = "/api/allRequests"
 
 const getAllByToken = async (webhookToken) => {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/allRequests/${webhookToken}`
+      `${baseUrl}/${webhookToken}`
     );
     // /api/allRequests/${webhookToken}
     // console.log(response.data)

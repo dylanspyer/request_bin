@@ -7,12 +7,20 @@ const RequestList = ({ requests, handleRequestClick }) => {
     return requests.map(requestInfo);
   };
 
-  const requestInfo = ({ request_id, time, method, path }) => {
+  const requestInfo = ({ request_id, created_at, method, path }) => {
+    const displayTime = () => {
+      let time = created_at.toString().substring(11,19)
+      if (Number(time.substring(0,2)) > 12) {
+        return Number(time.substring(0,2)) - 12 + time.substring(2) + ' PM'
+      } else {
+        return time + ' AM'
+      }
+    }
     return (
       <li key={request_id}>
         <button onClick={() => handleRequestClick(request_id)}>
           {" "}
-          {time} {method} {path}
+          {displayTime()} {method} {path}
         </button>
       </li>
     );

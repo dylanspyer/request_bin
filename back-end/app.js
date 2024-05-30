@@ -84,6 +84,18 @@ app.get("/api/getSpecificRequest/:mongoId", async (req, res) => {
   res.status(200).send(specificRequestData);
 });
 
+// deletes a specific request from 
+app.delete("/api/allRequests/deleteOldRequest/:mongoId", async (req, res) => {
+  const mongoId = req.params.mongoId;
+  const deleteOldRequest = await pgService.deleteRequest(mongoId);
+
+  // if (!deleteOldRequest) {
+  //   return res.sendStatus(401);
+  // }
+
+  res.status(202).send(deleteOldRequest);
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

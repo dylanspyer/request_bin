@@ -1,15 +1,28 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-const bcrypt = require("bcrypt");
 const pgService = require("./utils/pgService");
 const { v4: uuidGenerator } = require("uuid");
 const { saveRequestInfo, getSpecificRequest } = require("./utils/mongoService");
 const cors = require("cors");
 
 app.use(cors());
+
+function parseRawBody(req, res, next) {
+  req.rawBody = "";
+
+  req.on("data", function (chunk) {
+    req.rawBody += chunk;
+  });
+
+  next();
+}
+
+app.use(parseRawBody);
 app.use(express.json());
-app.use(express.text({ type: 'text/*' }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.text({ type: "text/*" }));
+app.use(express.raw({ type: "application/octet-stream" }));
 
 // create a random webhook token to be used as an endpoint
 app.post("/api/generateWebhookToken", async (req, res) => {
@@ -37,7 +50,9 @@ app.all("/api/request/:webhookToken", async (req, res) => {
   const method = req.method;
   const path = req.path.replace(`/api/request/${webhookToken}`, "/");
 
-  const mongoId = await saveRequestInfo(req, path);
+  const body = Object.keys(req.body).length === 0 ? req.rawBody : req.body;
+
+  const mongoId = await saveRequestInfo(req, path, body);
   // encryptedMongoId = await bcrypt.hash(mongoId, 5);
 
   await pgService.insertIncomingRequestInfo(path, method, mongoId, binId);

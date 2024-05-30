@@ -4,17 +4,24 @@ import mongoRequestDataService from "./services/mongoRequestData";
 import generateWebhookTokenService from "./services/generateWebhookToken";
 import RequestList from "./Components/RequestList";
 import RequestDetails from "./Components/RequestDetails";
+import Button from "./Components/Button";
+
+const localStorageToken = localStorage.getItem("webhookToken");
 
 function App() {
   // Holds the "targeted" request on the RHS
   const [selectedRequestDetails, setSelectedRequestDetails] = useState(null);
   const [requests, setRequests] = useState([]);
-  const [webhookToken, setWebhookToken] = useState(null);
+  const [webhookToken, setWebhookToken] = useState(() => {
+    return localStorageToken ? localStorageToken : null;
+  });
 
   // Get the webhook from the url if it already exists
   useEffect(() => {
     const currentPath = window.location.pathname;
+
     if (currentPath.length > 1) {
+      localStorage.setItem("webhookToken", currentPath.substring(1));
       setWebhookToken(currentPath.substring(1));
     }
   }, []);
@@ -29,7 +36,7 @@ function App() {
         })
         .catch(() => {
           setWebhookToken(null);
-          window.location.href = '/';
+          window.location.href = "/";
         });
     }
   }, [webhookToken]);
@@ -51,6 +58,11 @@ function App() {
     } catch (error) {
       console.error("an error occurred when handling click");
     }
+  };
+
+  const clearLocalStorageNavigateHome = () => {
+    localStorage.removeItem("webhookToken");
+    window.location.href = "/";
   };
 
   // Send to the backend to create a webhook token
@@ -75,6 +87,12 @@ function App() {
     return (
       <div>
         <h1>Team_2 RequestBin Site</h1>
+        <Button
+          onClick={clearLocalStorageNavigateHome}
+          title="Create a New Webhook Token"
+          backgroundColor="#841584"
+          fontColor="white"
+        />
         <p style={{ textAlign: "right" }}>
           {window.location.href.replace(webhookToken, "") +
             "api/request/" +

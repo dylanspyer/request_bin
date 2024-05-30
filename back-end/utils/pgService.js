@@ -47,10 +47,19 @@ const insertIncomingRequestInfo = async (path, method, mongoId, binId) => {
   await dbQuery(INSERT_REQUEST_INFO, path, method, mongoId, binId);
 };
 
+// Delete request from postgresql
+const deleteRequest = async (mongoId) => {
+  const DELETE_REQUEST_INFO =
+    "DELETE FROM incoming_requests WHERE mongo_id = $1";
+
+  await dbQuery(DELETE_REQUEST_INFO, mongoId);
+};
+
 module.exports = {
   getWebhookToken,
   isUniqueToken,
   saveWebhookToken,
   getAllRequestsForToken,
   insertIncomingRequestInfo,
+  deleteRequest
 };

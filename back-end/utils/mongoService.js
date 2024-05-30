@@ -2,12 +2,12 @@ const RequestInfo = require("../models/requestInfo.js");
 const { connectToMongoDB } = require("./mongo-connection");
 
 // Save a request to mongo database
-const saveRequestInfo = async (req, path) => {
+const saveRequestInfo = async (req, path, body) => {
   const requestInfo = new RequestInfo({
     headers: req.headers,
     path: path,
     queryParams: req.query,
-    body: req.body,
+    body,
     method: req.method,
   });
 

@@ -29,6 +29,7 @@ function App() {
         })
         .catch(() => {
           setWebhookToken(null);
+          window.location.href = '/';
         });
     }
   }, [webhookToken]);

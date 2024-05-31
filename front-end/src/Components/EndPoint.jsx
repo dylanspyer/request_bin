@@ -1,7 +1,5 @@
-import requestsService from "../services/requests";
-
 // eslint-disable-next-line react/prop-types
-const EndPoint = ({ webhookToken, setRequests }) => {
+const EndPoint = ({ webhookToken, refreshRequests }) => {
   const copyText = () => {
     const textToCopy = document.querySelector(".request-bin-link").textContent;
 
@@ -19,16 +17,6 @@ const EndPoint = ({ webhookToken, setRequests }) => {
   const clearLocalStorageNavigateHome = () => {
     localStorage.removeItem("webhookToken");
     window.location.href = "/";
-  };
-
-  const refreshRequests = async () => {
-    try {
-      const response = await requestsService.getAllByToken(webhookToken);
-
-      setRequests(response);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (

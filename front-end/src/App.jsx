@@ -70,6 +70,17 @@ function App() {
     });
   };
 
+  const refreshRequests = async () => {
+    try {
+      const response = await requestsService.getAllByToken(webhookToken);
+
+      setRequests(response);
+      setSelectedRequestDetails(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const WelcomeContent = () => (
     <div className="content">
       <button onClick={() => createWebhook()}>
@@ -80,7 +91,7 @@ function App() {
 
   const RequestContent = () => (
     <div>
-      <EndPoint webhookToken={webhookToken} setRequests={setRequests} />
+      <EndPoint webhookToken={webhookToken} refreshRequests={refreshRequests} />
       <div className="flex-container">
         <RequestList
           requests={requests}

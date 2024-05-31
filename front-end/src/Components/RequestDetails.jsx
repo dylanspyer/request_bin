@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
+import { useState } from "react";
+
 const createTable = (title, property) => {
   if (!property) return;
 
   return (
     <div className="table-div">
-      <h2> {title}</h2>
+      <h2>{title}</h2>{" "}
       <table>
         <tbody>{createTableRows(property)}</tbody>
       </table>

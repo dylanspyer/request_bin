@@ -5,9 +5,7 @@ const EndPoint = ({ webhookToken, refreshRequests }) => {
 
     navigator.clipboard
       .writeText(textToCopy)
-      .then(() => {
-        console.log("Text copied to clipboard: " + textToCopy);
-      })
+      .then(() => {})
       .catch((err) => {
         // Error message
         console.error("Could not copy text: ", err);

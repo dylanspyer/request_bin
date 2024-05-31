@@ -3,7 +3,7 @@ const createTable = (title, property) => {
   if (!property) return;
 
   return (
-    <div>
+    <div className="table-div">
       <h2> {title}</h2>
       <table>
         <tbody>{createTableRows(property)}</tbody>

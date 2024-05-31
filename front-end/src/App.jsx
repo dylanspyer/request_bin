@@ -4,9 +4,11 @@ import mongoRequestDataService from "./services/mongoRequestData";
 import generateWebhookTokenService from "./services/generateWebhookToken";
 import RequestList from "./Components/RequestList";
 import RequestDetails from "./Components/RequestDetails";
-import Button from "./Components/Button";
-
+import EndPoint from "./Components/EndPoint";
+import TitleBar from "./Components/TitleBar";
 const localStorageToken = localStorage.getItem("webhookToken");
+
+import "./styles.css";
 
 function App() {
   // Holds the "targeted" request on the RHS
@@ -60,13 +62,7 @@ function App() {
     }
   };
 
-  const clearLocalStorageNavigateHome = () => {
-    localStorage.removeItem("webhookToken");
-    window.location.href = "/";
-  };
-
   // Send to the backend to create a webhook token
-  // Using a generic one for now
   const createWebhook = () => {
     generateWebhookTokenService.getWebhookToken().then((token) => {
       setWebhookToken(token);
@@ -74,40 +70,33 @@ function App() {
     });
   };
 
-  if (webhookToken === null) {
-    return (
-      <div>
-        <h1>Team_2 RequestBin Site</h1>
-        <button onClick={() => createWebhook()}>
-          Click here to create a webhook
-        </button>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <h1>Team_2 RequestBin Site</h1>
-        <Button
-          onClick={clearLocalStorageNavigateHome}
-          title="Create a New Webhook Token"
-          backgroundColor="#841584"
-          fontColor="white"
+  const WelcomeContent = () => (
+    <div className="content">
+      <button onClick={() => createWebhook()}>
+        Click here to create a webhook
+      </button>
+    </div>
+  );
+
+  const RequestContent = () => (
+    <div>
+      <EndPoint webhookToken={webhookToken} setRequests={setRequests} />
+      <div className="flex-container">
+        <RequestList
+          requests={requests}
+          handleRequestClick={handleRequestClick}
         />
-        <p style={{ textAlign: "right" }}>
-          {window.location.href.replace(webhookToken, "") +
-            "api/request/" +
-            webhookToken}
-        </p>{" "}
-        <div className="row">
-          <RequestList
-            requests={requests}
-            handleRequestClick={handleRequestClick}
-          />
-          <RequestDetails selectedRequestDetails={selectedRequestDetails} />
-        </div>
+        <RequestDetails selectedRequestDetails={selectedRequestDetails} />
       </div>
-    );
-  }
+    </div>
+  );
+
+  return (
+    <>
+      <TitleBar />
+      {webhookToken === null ? <WelcomeContent /> : <RequestContent />}
+    </>
+  );
 }
 
 export default App;

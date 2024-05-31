@@ -22,7 +22,8 @@ const RequestList = ({ requests, handleRequestClick }) => {
         onClick={() => handleRequestClick(request_id)}
         className="request-item"
       >
-        {displayTime()} {method} {path}
+        <span className="time">{displayTime()}</span>
+        <span className={method}> {method} </span> <span>{path}</span>
       </div>
     );
   };

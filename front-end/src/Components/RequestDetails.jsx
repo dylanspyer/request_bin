@@ -59,7 +59,7 @@ const RequestDetails = ({ selectedRequestDetails }) => {
         <h2>Selected Request Data</h2>
         <p>
           {" "}
-          Details: {method} {path}{" "}
+          Details: <span className={method}>{method}</span> {path}{" "}
         </p>
 
         {createTable("Headers", headers)}

@@ -12,20 +12,64 @@ body {
   background-color: rgb(30, 33, 34);
   width: 1280px;
   margin: 0 auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: #e8e6e3;
 }
 
 p {
   color: #f8f8f8;
 }
 
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
 h2 {
-  color: #e8e6e3;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  border-bottom: #e8e6e3;
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 10px;
+  height: 3px;
+  background-color: #f8f8f8;
+}
+
+p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #f8f8f8;
+}
+
+span.method {
+  font-weight: bold;
+  color: #f8f8f8;
+  text-transform: uppercase;
 }
 
 .logo {
   max-width: auto;
   height: 125px;
-  max-width: 200px; /* Adjust this value as needed */
+  max-width: 200px;
 }
 
 .titleBar {
@@ -40,7 +84,7 @@ h2 {
 
 .titleBar h1 {
   margin: 0;
-  font-size: 50px; /* Increase the font size to 80px */
+  font-size: 50px;
 }
 
 .content {
@@ -103,12 +147,6 @@ button:hover {
   flex: 3;
 }
 
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
 .request-item {
   display: flex;
   align-items: center;
@@ -128,8 +166,10 @@ h2 {
   font-size: 16px;
   margin: 0 -5px;
   display: flex;
+  flex-direction: row;
   gap: 20px;
 }
+
 .request-item:hover {
   background-color: var(--button-hover);
 }
@@ -168,18 +208,39 @@ h2 {
 }
 
 table {
+  margin-top: 1rem;
   width: 100%;
   border-collapse: collapse;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  margin-top: 10px;
 }
 
 th,
 td {
-  padding: 10px;
-  border: 1px solid var(--button-border);
+  padding: 15px;
+  text-align: left;
+  border: none;
   color: #e8e6e3;
 }
 
 th {
-  background-color: var(--button-background);
-  color: var(--button-text);
+  background-color: rgb(30, 33, 34);
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+tr:nth-child(even) td {
+  background-color: #2d2d2d;
+}
+
+tr:hover td {
+  background-color: #3e3e3e;
+}
+
+td:first-child {
+  font-weight: bold;
 }

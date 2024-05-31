@@ -3,14 +3,12 @@ const createTable = (title, property) => {
   if (!property) return;
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>{title}</th>
-        </tr>
-      </thead>
-      <tbody>{createTableRows(property)}</tbody>
-    </table>
+    <div>
+      <h2> {title}</h2>
+      <table>
+        <tbody>{createTableRows(property)}</tbody>
+      </table>
+    </div>
   );
 };
 
@@ -48,9 +46,8 @@ const RequestDetails = ({ selectedRequestDetails }) => {
     // Populates default info before a user clicks a target request
     if (selectedRequestDetails === null) {
       return (
-        <div className="column">
+        <div className="column right">
           <h2>Welcome to our Site</h2>
-          <p>*Default statement*</p>
         </div>
       );
     }
@@ -58,7 +55,7 @@ const RequestDetails = ({ selectedRequestDetails }) => {
     const { method, path, headers, queryParams, body } = selectedRequestDetails;
 
     return (
-      <div className="column">
+      <div className="column right">
         <h2>Selected Request Data</h2>
         <p>
           {" "}

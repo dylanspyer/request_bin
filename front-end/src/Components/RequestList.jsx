@@ -9,27 +9,28 @@ const RequestList = ({ requests, handleRequestClick }) => {
 
   const requestInfo = ({ request_id, created_at, method, path }) => {
     const displayTime = () => {
-      let time = created_at.toString().substring(11,19)
-      if (Number(time.substring(0,2)) > 12) {
-        return Number(time.substring(0,2)) - 12 + time.substring(2) + ' PM'
+      let time = created_at.toString().substring(11, 19);
+      if (Number(time.substring(0, 2)) > 12) {
+        return Number(time.substring(0, 2)) - 12 + time.substring(2) + " PM";
       } else {
-        return time + ' AM'
+        return time + " AM";
       }
-    }
+    };
     return (
-      <li key={request_id}>
-        <button onClick={() => handleRequestClick(request_id)}>
-          {" "}
-          {displayTime()} {method} {path}
-        </button>
-      </li>
+      <div
+        key={request_id}
+        onClick={() => handleRequestClick(request_id)}
+        className="request-item"
+      >
+        {displayTime()} {method} {path}
+      </div>
     );
   };
 
   return (
-    <div className="column">
+    <div className="column left">
       <h2>List of Webhook Requests</h2>
-      <ul>{createRequestList(requests)}</ul>
+      <div className="requests">{createRequestList(requests)}</div>
     </div>
   );
 };

@@ -34,6 +34,7 @@ function App() {
       requestsService
         .getAllByToken(webhookToken)
         .then((requests) => {
+          requests.reverse();
           setRequests(requests);
         })
         .catch(() => {
@@ -73,7 +74,7 @@ function App() {
   const refreshRequests = async () => {
     try {
       const response = await requestsService.getAllByToken(webhookToken);
-
+      response.reverse();
       setRequests(response);
       setSelectedRequestDetails(null);
     } catch (error) {
@@ -83,6 +84,14 @@ function App() {
 
   const WelcomeContent = () => (
     <div className="content">
+      <p>
+        Ahoy, mateys! Welcome aboard Captain Webhook, the finest vessel for all
+        your webhook debugging needs.
+      </p>
+      <p>
+        Avast ye! Click below to set sail on a journey where every webhook sent
+        our way is captured and logged with precision
+      </p>
       <button onClick={() => createWebhook()}>
         Click here to create a webhook
       </button>

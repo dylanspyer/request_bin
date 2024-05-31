@@ -32,7 +32,9 @@ const handleBodyDataType = (body) => {
     return (
       <>
         <h2>Body</h2>
-        <p>{body}</p>
+        <div className="raw-text">
+          <p>{body}</p>
+        </div>
       </>
     );
   } else {

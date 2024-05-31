@@ -22,7 +22,7 @@ const getAllByToken = async (webhookToken) => {
       let index = 0;
       const currentDate = new Date();
       while (index < response.data.length) {
-        if (currentDate - new Date(response.data[index].created_at) > 30000) {
+        if (currentDate - new Date(response.data[index].created_at) > 60000) {
           await deleteById(response.data[index].request_id);
           response.data.splice(index, 1);
           continue;

@@ -4,7 +4,7 @@ const createTable = (title, property) => {
 
   return (
     <div className="table-div">
-      <h2> {title}</h2>
+      <h2>{title}</h2>{" "}
       <table>
         <tbody>{createTableRows(property)}</tbody>
       </table>
@@ -32,7 +32,9 @@ const handleBodyDataType = (body) => {
     return (
       <>
         <h2>Body</h2>
-        <p>{body}</p>
+        <div className="raw-text">
+          <p>{body}</p>
+        </div>
       </>
     );
   } else {

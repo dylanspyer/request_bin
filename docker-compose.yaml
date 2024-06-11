@@ -12,8 +12,8 @@ services:
     container_name: back-end
     restart: unless-stopped
     environment:
-      - POSTGRES_URI=${POSTGRES_URI}
-      - MONGODB_URI=${MONGODB_URI}
+      # - POSTGRES_URI=${POSTGRES_URI}
+      # - MONGODB_URI=${MONGODB_URI}
 
   nginx:
     build:

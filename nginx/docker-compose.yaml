@@ -17,7 +17,7 @@ services:
 
   nginx:
     build:
-      context: ./
+      context: ./nginx
       dockerfile: Dockerfile
     container_name: nginx
     restart: unless-stopped

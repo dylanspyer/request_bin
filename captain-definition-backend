@@ -1,4 +1,10 @@
 {
   "schemaVersion": 2,
-  "dockerfilePath": ".back-end/Dockerfile"
+  "dockerfileLines": [
+    "FROM node:20",
+    "RUN mkdir -p /usr/src/app",
+    "COPY ./backend /usr/src/app",
+    "RUN npm install && npm cache clean --force",
+    "CMD [ \"npm\", \"start\" ]"
+  ]
 }

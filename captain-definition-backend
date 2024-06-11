@@ -4,7 +4,7 @@
     "FROM node:20",
     "RUN mkdir -p /usr/src/app",
     "COPY ./back-end /usr/src/app",
-    "RUN npm install && npm cache clean --force",
+    "RUN npm install",
     "CMD [ \"npm\", \"start\" ]"
   ]
 }

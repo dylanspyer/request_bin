@@ -97,6 +97,10 @@ app.delete("/api/allRequests/deleteOldRequest/:mongoId", async (req, res) => {
   res.status(202).send(deleteOldRequest);
 });
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

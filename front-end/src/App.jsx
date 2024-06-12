@@ -25,7 +25,6 @@ function App() {
     if (currentPath.length > 1) {
       localStorage.setItem("webhookToken", currentPath.substring(1));
       setWebhookToken(currentPath.substring(1));
-      window.location.href = window.location.href + currentPath;
     }
   }, []);
 

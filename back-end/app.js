@@ -6,6 +6,7 @@ const { v4: uuidGenerator } = require("uuid");
 const { saveRequestInfo, getSpecificRequest } = require("./utils/mongoService");
 const cors = require("cors");
 
+app.use(express.static("dist"));
 app.use(cors());
 
 function parseRawBody(req, res, next) {
@@ -84,7 +85,7 @@ app.get("/api/getSpecificRequest/:mongoId", async (req, res) => {
   res.status(200).send(specificRequestData);
 });
 
-// deletes a specific request from 
+// deletes a specific request from
 app.delete("/api/allRequests/deleteOldRequest/:mongoId", async (req, res) => {
   const mongoId = req.params.mongoId;
   const deleteOldRequest = await pgService.deleteRequest(mongoId);

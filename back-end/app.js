@@ -5,6 +5,7 @@ const pgService = require("./utils/pgService");
 const { v4: uuidGenerator } = require("uuid");
 const { saveRequestInfo, getSpecificRequest } = require("./utils/mongoService");
 const cors = require("cors");
+const path = require('path'); 
 
 app.use(express.static("dist"));
 app.use(cors());
